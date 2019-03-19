@@ -46,25 +46,22 @@ import org.apache.commons.lang.StringUtils;
 import com.google.gson.JsonObject;
 
 public class ResumeParserProgram {
-	private static File parseToHTMLUsingApacheTikka(String file)
-			throws IOException, SAXException, TikaException {
+	private static File parseToHTMLUsingApacheTikka(String file) throws IOException, SAXException, TikaException {
 		// determine extension
 		String ext = FilenameUtils.getExtension(file);
 		String outputFileFormat = "";
 		// ContentHandler handler;
-		if (ext.equalsIgnoreCase("html") | ext.equalsIgnoreCase("pdf")
-				| ext.equalsIgnoreCase("doc") | ext.equalsIgnoreCase("docx")) {
+		if (ext.equalsIgnoreCase("html") | ext.equalsIgnoreCase("pdf") | ext.equalsIgnoreCase("doc")
+				| ext.equalsIgnoreCase("docx")) {
 			outputFileFormat = ".html";
 			// handler = new ToXMLContentHandler();
 		} else if (ext.equalsIgnoreCase("txt") | ext.equalsIgnoreCase("rtf")) {
 			outputFileFormat = ".txt";
 		} else {
-			System.out.println("Input format of the file " + file
-					+ " is not supported.");
+			System.out.println("Input format of the file " + file + " is not supported.");
 			return null;
 		}
-		String OUTPUT_FILE_NAME = FilenameUtils.removeExtension(file)
-				+ outputFileFormat;
+		String OUTPUT_FILE_NAME = FilenameUtils.removeExtension(file) + outputFileFormat;
 		ContentHandler handler = new ToXMLContentHandler();
 		// ContentHandler handler = new BodyContentHandler();
 		// ContentHandler handler = new BodyContentHandler(
@@ -84,8 +81,7 @@ public class ResumeParserProgram {
 		}
 	}
 
-	public static JSONObject loadGateAndAnnie(File file) throws GateException,
-			IOException {
+	public static JSONObject loadGateAndAnnie(File file) throws GateException, IOException {
 		Out.prln("Initialising basic system...");
 		Gate.init();
 		Out.prln("...basic system initialised");
@@ -104,8 +100,7 @@ public class ResumeParserProgram {
 		params.put("preserveOriginalContent", new Boolean(true));
 		params.put("collectRepositioningInfo", new Boolean(true));
 		Out.prln("Creating doc for " + u);
-		Document resume = (Document) Factory.createResource(
-				"gate.corpora.DocumentImpl", params);
+		Document resume = (Document) Factory.createResource("gate.corpora.DocumentImpl", params);
 		corpus.add(resume);
 
 		// tell the pipeline about the corpus and run it
@@ -138,8 +133,7 @@ public class ResumeParserProgram {
 
 				// Needed name Features
 				JSONObject nameJson = new JSONObject();
-				String[] nameFeatures = new String[] { "firstName",
-						"middleName", "surname" };
+				String[] nameFeatures = new String[] { "firstName", "middleName", "surname" };
 				for (String feature : nameFeatures) {
 					String s = (String) currAnnot.getFeatures().get(feature);
 					if (s != null && s.length() > 0) {
@@ -158,13 +152,11 @@ public class ResumeParserProgram {
 				if (title != null && title.length() > 0) {
 					profileJSON.put("title", title);
 				}
-			}// title
+			} // title
 
 			// email,address,phone,url
-			String[] annSections = new String[] { "EmailFinder",
-					"AddressFinder", "PhoneFinder", "URLFinder" };
-			String[] annKeys = new String[] { "email", "address", "phone",
-					"url" };
+			String[] annSections = new String[] { "EmailFinder", "AddressFinder", "PhoneFinder", "URLFinder" };
+			String[] annKeys = new String[] { "email", "address", "phone", "url" };
 			for (short i = 0; i < annSections.length; i++) {
 				String annSection = annSections[i];
 				curAnnSet = defaultAnnotSet.get(annSection);
@@ -187,8 +179,7 @@ public class ResumeParserProgram {
 			}
 
 			// awards,credibility,education_and_training,extracurricular,misc,skills,summary
-			String[] otherSections = new String[] { "summary",
-					"education_and_training", "skills", "accomplishments",
+			String[] otherSections = new String[] { "summary", "education_and_training", "skills", "accomplishments",
 					"awards", "credibility", "extracurricular", "misc" };
 			for (String otherSection : otherSections) {
 				curAnnSet = defaultAnnotSet.get(otherSection);
@@ -197,11 +188,9 @@ public class ResumeParserProgram {
 				while (it.hasNext()) {
 					JSONObject subSection = new JSONObject();
 					currAnnot = (Annotation) it.next();
-					String key = (String) currAnnot.getFeatures().get(
-							"sectionHeading");
+					String key = (String) currAnnot.getFeatures().get("sectionHeading");
 					String value = stringFor(doc, currAnnot);
-					if (!StringUtils.isBlank(key)
-							&& !StringUtils.isBlank(value)) {
+					if (!StringUtils.isBlank(key) && !StringUtils.isBlank(value)) {
 						subSection.put(key, value);
 					}
 					if (!subSection.isEmpty()) {
@@ -220,15 +209,12 @@ public class ResumeParserProgram {
 			while (it.hasNext()) {
 				JSONObject workExperience = new JSONObject();
 				currAnnot = (Annotation) it.next();
-				String key = (String) currAnnot.getFeatures().get(
-						"sectionHeading");
+				String key = (String) currAnnot.getFeatures().get("sectionHeading");
 				if (key.equals("work_experience_marker")) {
 					// JSONObject details = new JSONObject();
-					String[] annotations = new String[] { "date_start",
-							"date_end", "jobtitle", "organization" };
+					String[] annotations = new String[] { "date_start", "date_end", "jobtitle", "organization" };
 					for (String annotation : annotations) {
-						String v = (String) currAnnot.getFeatures().get(
-								annotation);
+						String v = (String) currAnnot.getFeatures().get(annotation);
 						if (!StringUtils.isBlank(v)) {
 							// details.put(annotation, v);
 							workExperience.put(annotation, v);
@@ -253,33 +239,49 @@ public class ResumeParserProgram {
 				parsedJSON.put("work_experience", workExperiences);
 			}
 
-		}// if
+		} // if
 		Out.prln("Completed parsing...");
 		return parsedJSON;
 	}
 
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			System.err
-					.println("USAGE: java ResumeParser <inputfile> <outputfile>");
+			System.err.println("USAGE: java ResumeParser <inputFolder>");
 			return;
 		}
-		String inputFileName = args[0];
-		String outputFileName = (args.length == 2) ? args[1]
-				: "parsed_resume.json";
+		String inputFolderName = args[0];
+		String outputFolderName = "parsed_resume.json";
 
 		try {
-			File tikkaConvertedFile = parseToHTMLUsingApacheTikka(inputFileName);
-			if (tikkaConvertedFile != null) {
-				JSONObject parsedJSON = loadGateAndAnnie(tikkaConvertedFile);
 
-				Out.prln("Writing to output...");
-				FileWriter jsonFileWriter = new FileWriter(outputFileName);
-				jsonFileWriter.write(parsedJSON.toJSONString());
-				jsonFileWriter.flush();
-				jsonFileWriter.close();
-				Out.prln("Output written to file " + outputFileName);
-			}
+			File folder = new File(inputFolderName);
+			File[] fileList = folder.listFiles();
+				for(int i = 0 ; i<fileList.length;i++){
+				System.out.println(fileList[i].getName());}
+				// File tikkaConvertedFile = parseToHTMLUsingApacheTikka(fileList[0].getName());
+
+				// This code will take a file name then extract name and excd ,,tension and then
+				// create .json file with the same name
+				// String str = fileList[i].getName();
+				// String[] arrOfStr = str.split(".", 2);
+				// String newFileName = arrOfStr[0] + ".json";
+				// File newFile = new File(outputFolderName + File.separator + newFileName);
+				// boolean isCreated = newFile.createNewFile();
+
+				// Check this var 'isCreated' if there exists some problem
+
+				// if (tikkaConvertedFile != null) {
+				// 	JSONObject parsedJSON = loadGateAndAnnie(tikkaConvertedFile);
+
+				// 	Out.prln("Writing to output...");
+
+				// 	FileWriter jsonFileWriter = new FileWriter(outputFolderName);
+				// 	jsonFileWriter.write(parsedJSON.toJSONString());
+				// 	jsonFileWriter.flush();
+				// 	jsonFileWriter.close();
+				// 	Out.prln("Output written to folder " + outputFolderName);
+				// }
+
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -288,3 +290,18 @@ public class ResumeParserProgram {
 		}
 	}
 }
+/*
+ * try { // This method will rename all files in a folder by chaning ReplaceFrom
+ * string with ReplaceWith string File folder=new File(folderName); File[]
+ * filesList=folder.listFiles(); for (int i=0; i< filesList.length; i++) {
+ * String newName= (filesList[i].toString().replaceAll(ReplaceFrom,
+ * ReplaceWith));
+ * 
+ * filesList[i].renameTo(new File(newName));
+ * 
+ * 
+ * } return "Successfully renamed "+filesList.length+" files."; } catch
+ * (Exception e) { return (e.getMessage());
+ * 
+ * }
+ */
