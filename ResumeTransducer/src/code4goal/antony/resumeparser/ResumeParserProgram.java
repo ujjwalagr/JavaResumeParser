@@ -262,15 +262,17 @@ public class ResumeParserProgram {
 				if (fileName.indexOf(".") > 0)
 					fileName = fileName.substring(0, fileName.lastIndexOf("."));
 					String newFileName = fileName+".json";
-					System.out.println(newFileName);
-				
+					// System.out.println(newFileName);
 				File tikkaConvertedFile = parseToHTMLUsingApacheTikka(inputFolderName+File.separator+fileList[i].getName());
 
 				// This code will take a file name then extract name and extension and then
 				// create .json file with the same name
+
 				File newFile = new File(outputFolderName + File.separator + newFileName);
 				boolean isCreated = newFile.createNewFile();
+
 				// Check this var 'isCreated' if there exists some problem
+				
 				if (tikkaConvertedFile != null) {
 				JSONObject parsedJSON = loadGateAndAnnie(tikkaConvertedFile);
 				Out.prln("Writing to output...");
@@ -288,18 +290,3 @@ public class ResumeParserProgram {
 		}
 	}
 }
-/*
- * try { // This method will rename all files in a folder by chaning ReplaceFrom
- * string with ReplaceWith string File folder=new File(folderName); File[]
- * filesList=folder.listFiles(); for (int i=0; i< filesList.length; i++) {
- * String newName= (filesList[i].toString().replaceAll(ReplaceFrom,
- * ReplaceWith));
- * 
- * filesList[i].renameTo(new File(newName));
- * 
- * 
- * } return "Successfully renamed "+filesList.length+" files."; } catch
- * (Exception e) { return (e.getMessage());
- * 
- * }
- */
