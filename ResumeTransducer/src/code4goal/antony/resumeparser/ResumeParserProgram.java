@@ -250,7 +250,7 @@ public class ResumeParserProgram {
 			return;
 		}
 		String inputFolderName = args[0];
-		String outputFolderName = "parsed_resume.json";
+		String outputFolderName = "parsed_resume";
 
 		try {
 
@@ -263,32 +263,24 @@ public class ResumeParserProgram {
 					fileName = fileName.substring(0, fileName.lastIndexOf("."));
 					String newFileName = fileName+".json";
 					System.out.println(newFileName);
-				}
-				// File tikkaConvertedFile = parseToHTMLUsingApacheTikka(fileList[0].getName());
+				
+				File tikkaConvertedFile = parseToHTMLUsingApacheTikka(fileList[0].getName());
 
-				// This code will take a file name then extract name and excd ,,tension and then
+				// This code will take a file name then extract name and extension and then
 				// create .json file with the same name
-				// String str = fileList[i].getName();
-				// String[] arrOfStr = str.split(".", 2);
-				// String newFileName = arrOfStr[0] + ".json";
-				// File newFile = new File(outputFolderName + File.separator + newFileName);
-				// boolean isCreated = newFile.createNewFile();
-
+				File newFile = new File(outputFolderName + File.separator + newFileName);
+				boolean isCreated = newFile.createNewFile();
 				// Check this var 'isCreated' if there exists some problem
-
-				// if (tikkaConvertedFile != null) {
-				// 	JSONObject parsedJSON = loadGateAndAnnie(tikkaConvertedFile);
-
-				// 	Out.prln("Writing to output...");
-
-				// 	FileWriter jsonFileWriter = new FileWriter(outputFolderName);
-				// 	jsonFileWriter.write(parsedJSON.toJSONString());
-				// 	jsonFileWriter.flush();
-				// 	jsonFileWriter.close();
-				// 	Out.prln("Output written to folder " + outputFolderName);
-				// }
-
-
+				if (tikkaConvertedFile != null) {
+				JSONObject parsedJSON = loadGateAndAnnie(tikkaConvertedFile);
+				Out.prln("Writing to output...");
+				FileWriter jsonFileWriter = new FileWriter(newFile);
+					jsonFileWriter.write(parsedJSON.toJSONString());
+					jsonFileWriter.flush();
+					jsonFileWriter.close();
+					Out.prln("Output written to folder " + outputFolderName);
+				}
+				}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("Sad Face :( .Something went wrong.");
