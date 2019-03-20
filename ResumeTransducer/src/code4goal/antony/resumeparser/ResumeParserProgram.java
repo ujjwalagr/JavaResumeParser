@@ -264,22 +264,22 @@ public class ResumeParserProgram {
 					String newFileName = fileName+".json";
 					System.out.println(newFileName);
 				
-				File tikkaConvertedFile = parseToHTMLUsingApacheTikka(fileList[0].getName());
+				// File tikkaConvertedFile = parseToHTMLUsingApacheTikka(fileList[0].getName());
 
 				// This code will take a file name then extract name and extension and then
 				// create .json file with the same name
 				File newFile = new File(outputFolderName + File.separator + newFileName);
 				boolean isCreated = newFile.createNewFile();
 				// Check this var 'isCreated' if there exists some problem
-				if (tikkaConvertedFile != null) {
-				JSONObject parsedJSON = loadGateAndAnnie(tikkaConvertedFile);
-				Out.prln("Writing to output...");
-				FileWriter jsonFileWriter = new FileWriter(newFile);
-					jsonFileWriter.write(parsedJSON.toJSONString());
-					jsonFileWriter.flush();
-					jsonFileWriter.close();
-					Out.prln("Output written to folder " + outputFolderName);
-				}
+				// if (tikkaConvertedFile != null) {
+				// JSONObject parsedJSON = loadGateAndAnnie(tikkaConvertedFile);
+				// Out.prln("Writing to output...");
+				// FileWriter jsonFileWriter = new FileWriter(newFile);
+				// 	jsonFileWriter.write(parsedJSON.toJSONString());
+				// 	jsonFileWriter.flush();
+				// 	jsonFileWriter.close();
+				// 	Out.prln("Output written to folder " + outputFolderName);
+				// }
 				}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
