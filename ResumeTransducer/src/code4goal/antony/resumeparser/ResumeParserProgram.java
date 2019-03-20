@@ -257,7 +257,12 @@ public class ResumeParserProgram {
 			File folder = new File(inputFolderName);
 			File[] fileList = folder.listFiles();
 				for(int i = 0 ; i<fileList.length;i++){
-				System.out.println(fileList[i].getName());}
+				System.out.println(fileList[i].getName());
+				String str = fileList[i].getName();
+				String[] arrOfStr = str.split(".", 2);
+				String newFileName = arrOfStr[0] + ".json";
+				System.out.println(newFileName);
+				}
 				// File tikkaConvertedFile = parseToHTMLUsingApacheTikka(fileList[0].getName());
 
 				// This code will take a file name then extract name and excd ,,tension and then
