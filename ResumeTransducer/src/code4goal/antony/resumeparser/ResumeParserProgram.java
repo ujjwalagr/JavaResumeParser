@@ -258,13 +258,10 @@ public class ResumeParserProgram {
 			File[] fileList = folder.listFiles();
 				for(int i = 0 ; i<fileList.length;i++){
 				System.out.println(fileList[i].getName());
-				String str = fileList[i].getName();
-				String[] arrOfStr = str.split(".", 2);
-				for(String s:arrOfStr){
-					System.out.println(s);
-				}
-				String newFileName = arrOfStr[0] + ".json";
-				System.out.println(newFileName);
+				String fileName = fileList[i].getName();
+				if (fileName.indexOf(".") > 0)
+					fileName = fileName.substring(0, fileName.lastIndexOf("."));
+					String newFileName = fileName+".json";
 				}
 				// File tikkaConvertedFile = parseToHTMLUsingApacheTikka(fileList[0].getName());
 
