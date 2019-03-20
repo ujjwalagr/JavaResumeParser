@@ -262,6 +262,7 @@ public class ResumeParserProgram {
 				if (fileName.indexOf(".") > 0)
 					fileName = fileName.substring(0, fileName.lastIndexOf("."));
 					String newFileName = fileName+".json";
+					System.out.println(newFileName);
 				}
 				// File tikkaConvertedFile = parseToHTMLUsingApacheTikka(fileList[0].getName());
 
