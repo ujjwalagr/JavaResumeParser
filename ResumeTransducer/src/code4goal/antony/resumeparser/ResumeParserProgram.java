@@ -260,6 +260,9 @@ public class ResumeParserProgram {
 				System.out.println(fileList[i].getName());
 				String str = fileList[i].getName();
 				String[] arrOfStr = str.split(".", 2);
+				for(String s:arrOfStr){
+					System.out.println(s);
+				}
 				String newFileName = arrOfStr[0] + ".json";
 				System.out.println(newFileName);
 				}
